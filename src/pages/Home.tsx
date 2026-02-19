@@ -15,6 +15,7 @@ import {
     Tag,
 } from "lucide-react";
 import { cn } from "../lib/utils";
+import { useNavigate } from "react-router-dom";
 
 type ReferenceLink = {
     id: string;
@@ -26,6 +27,7 @@ type ReferenceLink = {
 const CATEGORIES = ["Artigo", "Blog Post", "Referência", "Concorrente", "Inspiração"];
 
 export function Home() {
+    const navigate = useNavigate();
     const [description, setDescription] = useState("");
     const [links, setLinks] = useState<ReferenceLink[]>([]);
     const [newUrl, setNewUrl] = useState("");
@@ -64,7 +66,7 @@ export function Home() {
             <header className="flex flex-col gap-4 py-8">
                 <h1 className="text-4xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50 md:text-5xl">
                     O que estamos <br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">refratando hoje?</span>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">transformando hoje?</span>
                 </h1>
                 <p className="text-lg text-zinc-400 max-w-2xl">
                     Insira os detalhes do seu produto e adicione materiais de referência para que a IA possa gerar conteúdos poderosos.
@@ -240,9 +242,12 @@ export function Home() {
                             {description.length > 0 ? `${description.length} caracteres` : ""}
                             {links.length > 0 ? ` • ${links.length} referência${links.length > 1 ? "s" : ""}` : ""}
                         </p>
-                        <button className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-3 font-semibold text-white transition-all hover:scale-105 hover:shadow-lg hover:shadow-violet-500/25">
+                        <button
+                            onClick={() => navigate('/refractions')}
+                            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-3 font-semibold text-white transition-all hover:scale-105 hover:shadow-lg hover:shadow-violet-500/25"
+                        >
                             <Sparkles className="h-4 w-4" />
-                            Refratar
+                            Transformar
                         </button>
                     </div>
                 </div>
