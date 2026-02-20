@@ -14,10 +14,10 @@ export function Sidebar() {
     const location = useLocation();
 
     return (
-        <div className="flex h-screen w-20 flex-col items-center justify-between border-r border-white/5 bg-background py-8">
+        <div className="flex h-screen w-28 flex-col items-center justify-between border-r border-white/5 bg-background py-8">
             <div className="flex flex-col items-center gap-12 w-full">
                 <div className="flex w-full items-center justify-center p-2 mt-2">
-                    <img src="/logo.png" alt="Prism Logo" className="w-16 h-auto object-contain" />
+                    <img src="/logo.png" alt="Prism Logo" className="w-24 h-auto object-contain" />
                 </div>
 
                 {/* Navigation Icons */}
