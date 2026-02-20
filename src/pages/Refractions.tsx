@@ -1,170 +1,268 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
-    Sparkles,
-    Target,
-    Users,
-    AlertCircle,
-    Lightbulb,
-    ArrowRight,
-    CheckCircle2,
-    Loader2
+    Heart,
+    MessageCircle,
+    Send,
+    Bookmark,
+    Copy,
+    Wand2,
+    Calendar,
+    Check,
+    Plus
 } from "lucide-react";
+import { cn } from "../lib/utils";
 
-// Mock data for the generated content
-export const mockInsights = {
-    personas: [
-        { name: "Sarah", role: "Product Manager", pain: "Falta de alinhamento entre times e visão fragmentada do produto." },
-        { name: "Carlos", role: "UX Designer", pain: "Dificuldade em defender decisões de design com dados de negócio." }
+// Mock data matching Image 2
+const POST_DATA = {
+    content: "🚀 Leve sua marca para o próximo nível com a potência da IA generativa do PRISM!\n\nDescubra como o marketing sem limites pode transformar seus resultados e automatizar sua presença digital de forma inteligente. ✨\n\n#MarketingSemLimites #Inovação #IA",
+    account: "@seunegocio",
+    avatar: "bg-[#e2cbb1]", // Peachy color like the screenshot
+    imageBg: "bg-[#2c3d32]", // Dark green like the screenshot
+    imageText1: "MARKETING",
+    imageText2: "SEM LIMITES",
+    stats: [
+        { label: "ENGAJAMENTO", value: 88, color: "text-primary stroke-primary" },
+        { label: "ALCANCE", value: 74, color: "text-emerald-400 stroke-emerald-400" },
+        { label: "CLAREZA", value: 92, color: "text-rose-500 stroke-rose-500" },
+        { label: "VIRALIDADE", value: 65, color: "text-amber-400 stroke-amber-400" }
     ],
-    opportunities: [
-        "Integração nativa com ferramentas de design (Figma, Miro)",
-        "Geração automática de documentação a partir de wireframes",
-        "Analytics de engajamento preditivo do usuário"
-    ],
-    positioning: "A plataforma que traduz design abstrato em impacto de negócio tangível."
+    hashtags: [
+        "#MarketingDigital", "#SocialMedia", "#InteligenciaArtificial",
+        "#Branding", "#Inovação", "#Design"
+    ]
 };
 
 export function Refractions() {
-    const [isGenerating, setIsGenerating] = useState(true);
-    const [progress, setProgress] = useState(0);
+    const [activeTab, setActiveTab] = useState("Instagram");
+    const [caption, setCaption] = useState(POST_DATA.content);
 
-    // Simulate AI generation process
-    useEffect(() => {
-        if (progress < 100) {
-            const timer = setTimeout(() => {
-                setProgress(prev => Math.min(prev + Math.random() * 15, 100));
-            }, 250);
-            return () => clearTimeout(timer);
-        } else {
-            const timer = setTimeout(() => setIsGenerating(false), 600);
-            return () => clearTimeout(timer);
-        }
-    }, [progress]);
+    // SVG Circular Progress Bar component
+    const CircularProgress = ({ value, colorLabel }: { value: number, colorLabel: string }) => {
+        const radius = 28;
+        const circumference = 2 * Math.PI * radius;
+        const strokeDashoffset = circumference - (value / 100) * circumference;
 
-    if (isGenerating) {
+        // Parse color class to be used directly in SVG if possible, 
+        // or just rely on the wrapper's color
         return (
-            <div className="flex h-[subtitle] min-h-[60vh] flex-col items-center justify-center gap-6">
-                <div className="relative flex h-20 w-20 items-center justify-center rounded-3xl bg-violet-500/10 mb-4 shadow-[0_0_40px_-5px_theme(colors.violet.500/0.3)]">
-                    <div className="absolute inset-0 rounded-3xl animate-ping opacity-20 bg-violet-500"></div>
-                    <Loader2 className="h-10 w-10 animate-spin text-violet-400" />
-                </div>
-                <div className="space-y-3 text-center">
-                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-white">Transformando Dados em Insights</h2>
-                    <p className="text-zinc-400 text-sm md:text-base max-w-sm mx-auto leading-relaxed">
-                        Analisando links de referência e o contexto do projeto fornecido...
-                    </p>
-                </div>
-
-                <div className="w-full max-w-sm mt-4 p-4 rounded-xl bg-zinc-900/50 border border-white/5">
-                    <div className="flex justify-between text-xs font-semibold text-zinc-400 mb-3 tracking-wide uppercase">
-                        <span>Progresso</span>
-                        <span className="text-violet-400">{Math.round(progress)}%</span>
-                    </div>
-                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/5">
-                        <div
-                            className="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all duration-300 ease-out"
-                            style={{ width: `${progress}%` }}
+            <div className={`relative flex flex-col items-center justify-center gap-3 ${colorLabel.split(' ')[0]}`}>
+                <div className="relative h-16 w-16 flex items-center justify-center">
+                    {/* Background circle */}
+                    <svg className="absolute inset-0 h-full w-full -rotate-90">
+                        <circle
+                            className="stroke-white/5"
+                            cx="32"
+                            cy="32"
+                            r={radius}
+                            strokeWidth="4"
+                            fill="none"
                         />
-                    </div>
+                        {/* Progress circle */}
+                        <circle
+                            className={`transition-all duration-1000 ease-out ${colorLabel.split(' ')[1]}`}
+                            cx="32"
+                            cy="32"
+                            r={radius}
+                            strokeWidth="4"
+                            fill="none"
+                            strokeDasharray={circumference}
+                            strokeDashoffset={strokeDashoffset}
+                            strokeLinecap="round"
+                        />
+                    </svg>
+                    <span className="text-sm font-bold text-white relative z-10">{value}%</span>
                 </div>
             </div>
         );
-    }
+    };
 
     return (
-        <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <header className="flex flex-col gap-4">
-                <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 text-fuchsia-400 ring-1 ring-white/10 shadow-[0_0_20px_-5px_theme(colors.violet.500/0.3)]">
-                        <Sparkles className="h-6 w-6" />
-                    </div>
-                    <div>
-                        <h1 className="text-3xl font-bold tracking-tight text-white">Refrações do Projeto</h1>
-                        <p className="text-zinc-400 mt-1">Insights estratégicos gerados a partir do seu contexto.</p>
-                    </div>
-                </div>
-            </header>
+        <div className="flex flex-col h-[calc(100vh-8rem)] w-full max-w-6xl mx-auto gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            {/* Header Area */}
+            <div className="flex items-center justify-between">
+                <h1 className="text-2xl font-display font-black tracking-widest text-white uppercase flex items-center gap-3">
+                    Editor de Conteúdo
+                </h1>
 
-            {/* Positioning Statement */}
-            <div className="relative group overflow-hidden rounded-3xl border border-white/10 bg-zinc-900/40 p-1">
-                <div className="absolute inset-0 bg-gradient-to-r from-violet-600/10 via-fuchsia-600/10 to-violet-600/10 opacity-50 group-hover:opacity-100 transition-opacity duration-700"></div>
-                <div className="relative flex flex-col items-center text-center gap-5 rounded-[22px] bg-zinc-900/80 px-6 py-12 backdrop-blur-sm border border-white/5">
-                    <div className="rounded-full bg-white/5 p-3">
-                        <Target className="h-6 w-6 text-fuchsia-400" />
-                    </div>
-                    <h3 className="text-xs font-bold text-zinc-500 tracking-[0.2em] uppercase">Posicionamento Sugerido</h3>
-                    <p className="text-2xl sm:text-3xl lg:text-4xl font-semibold leading-tight text-transparent bg-clip-text bg-gradient-to-br from-white via-zinc-100 to-zinc-400 max-w-3xl">
-                        "{mockInsights.positioning}"
-                    </p>
-                </div>
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-2 mt-2">
-                {/* Personas Card */}
-                <div className="flex flex-col gap-6 rounded-3xl border border-white/5 bg-zinc-900/30 p-6 md:p-8 backdrop-blur-sm shadow-xl relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl -mr-20 -mt-20 transition-colors group-hover:bg-blue-500/10"></div>
-
-                    <div className="relative flex items-center justify-between border-b border-white/5 pb-5">
-                        <div className="flex items-center gap-3">
-                            <div className="rounded-xl bg-blue-500/10 p-2.5">
-                                <Users className="h-5 w-5 text-blue-400" />
-                            </div>
-                            <h2 className="text-xl font-bold text-white">Personas Mapeadas</h2>
+                <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-8">
+                        <div className="flex flex-col items-end">
+                            <span className="text-[9px] font-bold tracking-widest text-zinc-500 uppercase">Alcance Semanal</span>
+                            <span className="text-sm font-bold text-emerald-400">142.8k</span>
                         </div>
-                    </div>
-
-                    <div className="relative space-y-4">
-                        {mockInsights.personas.map((persona, i) => (
-                            <div key={i} className="flex gap-4 rounded-2xl bg-white/[0.03] p-5 border border-white/5 hover:border-white/10 hover:bg-white/[0.05] transition-all duration-300">
-                                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500/20 to-violet-500/20 text-blue-300 font-bold text-lg ring-1 ring-white/10 shadow-inner">
-                                    {persona.name.charAt(0)}
-                                </div>
-                                <div>
-                                    <h4 className="text-base font-bold text-white">{persona.name} <span className="font-medium text-zinc-500 text-sm ml-2">• {persona.role}</span></h4>
-                                    <div className="mt-2 text-sm text-zinc-400 flex items-start gap-2 bg-black/20 rounded-lg p-2.5 border border-white/5">
-                                        <AlertCircle className="h-4 w-4 shrink-0 text-amber-500 mt-0.5" />
-                                        <span className="leading-relaxed">Dificuldade: <span className="text-zinc-300">{persona.pain}</span></span>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Opportunities Card */}
-                <div className="flex flex-col gap-6 rounded-3xl border border-white/5 bg-zinc-900/30 p-6 md:p-8 backdrop-blur-sm shadow-xl relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -mr-20 -mt-20 transition-colors group-hover:bg-emerald-500/10"></div>
-
-                    <div className="relative flex items-center justify-between border-b border-white/5 pb-5">
-                        <div className="flex items-center gap-3">
-                            <div className="rounded-xl bg-emerald-500/10 p-2.5">
-                                <Lightbulb className="h-5 w-5 text-emerald-400" />
-                            </div>
-                            <h2 className="text-xl font-bold text-white">Oportunidades Iniciais</h2>
+                        <div className="flex flex-col items-end">
+                            <span className="text-[9px] font-bold tracking-widest text-zinc-500 uppercase">Engajamento</span>
+                            <span className="text-sm font-bold text-primary">+12.4%</span>
                         </div>
-                    </div>
-
-                    <div className="relative space-y-3 pt-2">
-                        {mockInsights.opportunities.map((opp, i) => (
-                            <div key={i} className="group/op flex items-center justify-between gap-4 rounded-2xl p-4 bg-white/[0.03] border border-white/5 hover:border-emerald-500/30 hover:bg-emerald-500/5 transition-all duration-300 cursor-default">
-                                <div className="flex items-start gap-3">
-                                    <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-500/70 group-hover/op:text-emerald-400 transition-colors mt-0.5" />
-                                    <span className="text-sm font-medium text-zinc-300 group-hover/op:text-white transition-colors leading-relaxed">{opp}</span>
-                                </div>
-                                <ArrowRight className="h-4 w-4 shrink-0 text-emerald-500/0 -translate-x-2 group-hover/op:text-emerald-500/50 group-hover/op:translate-x-0 transition-all duration-300" />
-                            </div>
-                        ))}
                     </div>
                 </div>
             </div>
 
-            {/* Next Action */}
-            <div className="mt-8 flex justify-end">
-                <button className="flex items-center gap-2 rounded-2xl bg-white px-8 py-4 text-sm font-bold text-zinc-900 transition-all hover:scale-105 hover:bg-zinc-100 hover:shadow-[0_0_40px_-10px_theme(colors.white/0.4)] active:scale-95">
-                    Exportar Relatório PDF
-                    <ArrowRight className="h-4 w-4" />
-                </button>
+            {/* Platform Tabs */}
+            <div className="flex items-center gap-8 border-b border-white/5 pb-0">
+                {["Instagram", "LinkedIn", "X", "Facebook"].map((platform) => (
+                    <button
+                        key={platform}
+                        onClick={() => setActiveTab(platform)}
+                        className={cn(
+                            "pb-4 text-xs font-bold tracking-widest uppercase transition-all relative",
+                            activeTab === platform
+                                ? "text-white"
+                                : "text-zinc-600 hover:text-zinc-400"
+                        )}
+                    >
+                        {platform}
+                        {activeTab === platform && (
+                            <div className="absolute bottom-0 left-0 w-full h-[2px] bg-primary shadow-[0_0_10px_theme(colors.primary/0.8)]" />
+                        )}
+                    </button>
+                ))}
+            </div>
+
+            {/* Main Content Area */}
+            <div className="flex flex-col lg:flex-row gap-6 mt-2 overflow-hidden flex-1">
+
+                {/* Left Panel - Post Preview */}
+                <div className="w-full lg:w-[400px] flex-shrink-0 flex flex-col gap-4">
+                    <h3 className="text-[10px] font-bold tracking-[0.2em] text-zinc-500 uppercase px-1">Prévia da Publicação</h3>
+
+                    <div className="flex-1 rounded-2xl border border-white/5 bg-[#0a0810] p-4 flex flex-col items-center">
+                        {/* Fake Mobile Screen Shell */}
+                        <div className="w-full max-w-[340px] rounded-[24px] border border-white/10 bg-[#000000] p-4 flex flex-col gap-3 shadow-2xl mt-4">
+
+                            {/* Post Header */}
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <div className={cn("h-8 w-8 rounded-full", POST_DATA.avatar)}></div>
+                                    <span className="text-sm font-bold text-white tracking-wide">{POST_DATA.account}</span>
+                                </div>
+                                <MoreVerticalIcon className="h-5 w-5 text-zinc-500" />
+                            </div>
+
+                            {/* Post Image Container */}
+                            <div className="relative aspect-square w-full rounded-lg overflow-hidden flex flex-col items-center justify-center bg-[#07050a] border border-white/5">
+                                {/* Simulated image content */}
+                                <div className={cn("h-16 w-16 mb-6", POST_DATA.imageBg)}></div>
+                                <h4 className="text-2xl font-display font-black text-white tracking-widest">{POST_DATA.imageText1}</h4>
+                                <h4 className="text-3xl font-display font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-primary to-fuchsia-400 mt-[-5px]">
+                                    {POST_DATA.imageText2}
+                                </h4>
+                                <div className="w-12 h-1 bg-rose-500 rounded-full mt-6"></div>
+                            </div>
+
+                            {/* Post Actions */}
+                            <div className="flex items-center justify-between pt-1">
+                                <div className="flex items-center gap-4 text-white">
+                                    <Heart className="h-6 w-6" />
+                                    <MessageCircle className="h-6 w-6" />
+                                    <Send className="h-6 w-6 -rotate-45 -mt-1" />
+                                </div>
+                                <Bookmark className="h-6 w-6 text-white" />
+                            </div>
+
+                            {/* Post Caption Preview */}
+                            <div className="space-y-1">
+                                <p className="text-xs text-white">
+                                    <span className="font-bold mr-2">{POST_DATA.account}</span>
+                                    <span className="text-white/90 line-clamp-2">{caption}</span>
+                                </p>
+                                <span className="text-[10px] text-zinc-500 uppercase">Ver mais</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Right Panel - Editor & AI Insights */}
+                <div className="flex-1 flex flex-col gap-6 overflow-y-auto pr-2 pb-8">
+
+                    {/* Caption Editor Box */}
+                    <div className="rounded-2xl border border-white/5 bg-[#0a0810] p-6 flex flex-col gap-4">
+                        <div className="flex items-center justify-between">
+                            <h3 className="text-[10px] font-bold tracking-[0.2em] text-zinc-500 uppercase">Editor de Legenda (AI)</h3>
+                            <span className="text-[10px] font-bold tracking-widest text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20 uppercase">Otimizado</span>
+                        </div>
+
+                        <textarea
+                            value={caption}
+                            onChange={(e) => setCaption(e.target.value)}
+                            className="w-full bg-[#15121c] border border-white/5 rounded-xl p-4 text-sm text-white/90 focus:outline-none focus:border-primary/50 transition-all resize-none min-h-[160px] leading-relaxed"
+                        />
+
+                        <div className="flex items-center gap-3">
+                            <button className="flex-1 rounded-xl bg-[#15121c] border border-white/10 hover:border-white/20 py-3 text-xs font-bold tracking-widest text-white transition-colors flex items-center justify-center gap-2 uppercase">
+                                <Copy className="h-4 w-4" /> Copiar
+                            </button>
+                            <button className="flex-1 rounded-xl bg-primary/10 border border-primary/20 hover:bg-primary/20 py-3 text-xs font-bold tracking-widest text-primary transition-colors flex items-center justify-center gap-2 uppercase">
+                                <Wand2 className="h-4 w-4" /> Melhorar com IA
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* AI Performance Insights */}
+                    <div className="rounded-2xl border border-white/5 bg-[#0a0810] p-6">
+                        <h3 className="text-[10px] font-bold tracking-[0.2em] text-zinc-500 uppercase mb-8">AI Performance Insights</h3>
+
+                        <div className="flex items-center justify-around">
+                            {POST_DATA.stats.map((stat, i) => (
+                                <div key={i} className="flex flex-col items-center gap-4">
+                                    <CircularProgress value={stat.value} colorLabel={stat.color} />
+                                    <span className="text-[9px] font-bold tracking-widest text-zinc-500 uppercase text-center max-w-[80px]">
+                                        {stat.label}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Suggested Hashtags */}
+                    <div className="rounded-2xl border border-white/5 bg-[#0a0810] p-6">
+                        <h3 className="text-[10px] font-bold tracking-[0.2em] text-zinc-500 uppercase mb-5">Hashtags Sugeridas</h3>
+
+                        <div className="flex flex-wrap gap-2">
+                            {POST_DATA.hashtags.map((tag) => (
+                                <span key={tag} className="px-3 py-1.5 rounded-lg border border-white/10 bg-[#15121c] text-xs font-medium text-zinc-400 hover:text-white hover:border-white/20 transition-colors cursor-pointer">
+                                    {tag}
+                                </span>
+                            ))}
+                            <button className="px-3 py-1.5 rounded-lg border border-primary/20 bg-primary/10 text-xs font-bold text-primary hover:bg-primary/20 transition-colors cursor-pointer flex items-center gap-1 uppercase tracking-wider">
+                                <Plus className="h-3 w-3" /> Sugerir Mais
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Bottom Action Bar */}
+                    <div className="flex items-center gap-4 mt-auto pt-4">
+                        <button className="flex-1 rounded-xl bg-transparent border border-white/10 hover:bg-white/5 py-4 text-xs font-bold tracking-widest text-white transition-colors flex items-center justify-center gap-2 uppercase">
+                            <Calendar className="h-4 w-4" /> Agendar Postagem
+                        </button>
+                        <button className="flex-1 rounded-xl bg-primary hover:brightness-110 py-4 text-xs font-bold tracking-widest text-white shadow-[0_0_20px_-5px_theme(colors.primary/0.5)] transition-all flex items-center justify-center gap-2 uppercase">
+                            <Check className="h-4 w-4" /> Aprovar Agora
+                        </button>
+                    </div>
+
+                </div>
             </div>
         </div>
     );
+}
+
+function MoreVerticalIcon(props: React.SVGProps<SVGSVGElement>) {
+    return (
+        <svg
+            {...props}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <circle cx="12" cy="12" r="1" />
+            <circle cx="12" cy="5" r="1" />
+            <circle cx="12" cy="19" r="1" />
+        </svg>
+    )
 }

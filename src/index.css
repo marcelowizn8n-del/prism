@@ -1,22 +1,39 @@
 @import "tailwindcss";
 
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+
+@import "@fontsource/orbitron/700.css";
+@import "@fontsource/orbitron/900.css";
+
 @theme {
+  --font-sans: "Inter", sans-serif;
+  --font-display: "Orbitron", sans-serif;
+
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
   --color-popover: hsl(var(--popover));
   --color-popover-foreground: hsl(var(--popover-foreground));
+
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
+
   --color-secondary: hsl(var(--secondary));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
+
   --color-muted: hsl(var(--muted));
   --color-muted-foreground: hsl(var(--muted-foreground));
+
   --color-accent: hsl(var(--accent));
   --color-accent-foreground: hsl(var(--accent-foreground));
+
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
+
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
@@ -26,31 +43,45 @@
   --radius-sm: calc(var(--radius) - 4px);
 }
 
-
 @layer base {
   :root {
-    /* Premium Dark Theme Variables */
-    --background: 240 10% 3.9%;
-    /* Deep Zinc */
+    /* Prism AI Content Studio - Premium Dark Theme Variables */
+    /* Background Ultra Dark (almost black with slight blue/purple tint) */
+    --background: 247 25% 4%;
     --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
+
+    /* Sidebars and Slightly Elevated Cards */
+    --card: 247 25% 6%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
+
+    --popover: 247 25% 6%;
     --popover-foreground: 0 0% 98%;
-    --primary: 263.4 70% 50.4%;
-    /* Violet */
-    --primary-foreground: 210 40% 98%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
+
+    /* Neons from the screenshots */
+    /* Vibrant Purple as primary */
+    --primary: 260 100% 65%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Muted elements and borders */
+    --secondary: 240 10% 10%;
+    --secondary-foreground: 0 0% 80%;
+
+    --muted: 240 10% 12%;
+    --muted-foreground: 240 5% 60%;
+
+    --accent: 260 100% 65%;
+    /* Soft highlight */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 80% 50%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+
+    --border: 240 5% 15%;
+    /* Very subtle borders */
+    --input: 240 5% 12%;
+    /* Input backgrounds */
+
+    --ring: 260 100% 65%;
     --radius: 0.75rem;
   }
 }
@@ -63,5 +94,28 @@
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
+    font-family: var(--font-sans);
+  }
+
+  /* Extended Typography Classes */
+  .font-display {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+/* Custom Gradients from Mockup */
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 20px theme('colors.primary / 50%');
+  }
+
+  .bg-gradient-prism {
+    background-image: linear-gradient(to right, #a855f7, #ec4899, #06b6d4);
+  }
+
+  .bg-gradient-primary {
+    background-image: linear-gradient(to right, #8b5cf6, #d946ef);
   }
 }
