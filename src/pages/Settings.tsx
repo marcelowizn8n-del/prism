@@ -1,7 +1,12 @@
-import { Bell, Shield, HelpCircle, Instagram, Linkedin, Twitter, Facebook } from "lucide-react";
+import { Bell, Shield, HelpCircle, Instagram, Linkedin, Twitter, Facebook, LogOut } from "lucide-react";
 import { cn } from "../lib/utils";
+import { useAuth } from "../contexts/AuthContext";
 
 export function Settings() {
+    const { user, signOut } = useAuth();
+    const email = user?.email ?? '';
+    const initial = email[0]?.toUpperCase() ?? '?';
+
     return (
         <div className="max-w-4xl space-y-8 pb-10">
             <header>
@@ -15,15 +20,19 @@ export function Settings() {
                 <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-zinc-900/50 p-6">
                     <div className="h-16 w-16 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 p-0.5">
                         <div className="flex h-full w-full items-center justify-center rounded-full bg-black">
-                            <span className="text-xl font-bold text-white">IA</span>
+                            <span className="text-xl font-bold text-white">{initial}</span>
                         </div>
                     </div>
                     <div>
-                        <h3 className="text-lg font-medium text-white">Isabella Anderson</h3>
-                        <p className="text-sm text-zinc-400">Senior Content Creator • PRO Member</p>
+                        <h3 className="text-lg font-medium text-white">{email}</h3>
+                        <p className="text-sm text-zinc-400">Membro PRISM</p>
                     </div>
-                    <button className="ml-auto rounded-lg bg-white/5 px-4 py-2 text-sm font-medium text-white hover:bg-white/10">
-                        Editar
+                    <button
+                        onClick={signOut}
+                        className="ml-auto flex items-center gap-2 rounded-lg bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 hover:bg-red-500/20 transition-colors"
+                    >
+                        <LogOut className="h-4 w-4" />
+                        Sair
                     </button>
                 </div>
             </section>

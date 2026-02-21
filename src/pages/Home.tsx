@@ -2,11 +2,16 @@ import { useState } from "react";
 import { Search, ArrowRight, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "../lib/utils";
+import { supabase } from "../lib/supabase";
+import { useAuth } from "../contexts/AuthContext";
 
 export function Home() {
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [productName, setProductName] = useState("");
     const [siteUrl, setSiteUrl] = useState("");
+    const [saving, setSaving] = useState(false);
+    const [saveError, setSaveError] = useState<string | null>(null);
 
     // Simulate steps like in the screenshot
     const activeStep = 1;
@@ -96,18 +101,37 @@ export function Home() {
                         </div>
 
                         {/* Next Action Button */}
-                        <div className="pt-8">
+                        <div className="pt-8 space-y-3">
+                            {saveError && (
+                                <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
+                                    {saveError}
+                                </p>
+                            )}
                             <button
-                                onClick={() => navigate('/refractions')}
-                                disabled={!productName && !siteUrl}
+                                onClick={async () => {
+                                    setSaving(true);
+                                    setSaveError(null);
+                                    const { error } = await supabase.from('brands').insert({
+                                        user_id: user?.id,
+                                        name: productName,
+                                        website_url: siteUrl || null,
+                                    });
+                                    setSaving(false);
+                                    if (error) {
+                                        setSaveError(error.message);
+                                    } else {
+                                        navigate('/refractions');
+                                    }
+                                }}
+                                disabled={(!productName && !siteUrl) || saving}
                                 className={cn(
                                     "w-full rounded-2xl py-5 font-display text-lg font-bold tracking-wider text-white transition-all duration-500 shadow-[0_0_40px_-10px_theme(colors.primary/0.5)]",
-                                    (productName || siteUrl)
+                                    (productName || siteUrl) && !saving
                                         ? "bg-gradient-prism hover:scale-[1.02] hover:shadow-[0_0_60px_-10px_theme(colors.primary/0.8)]"
                                         : "bg-zinc-800 text-zinc-500 opacity-50 cursor-not-allowed shadow-none"
                                 )}
                             >
-                                PRÓXIMO PASSO
+                                {saving ? 'SALVANDO...' : 'PRÓXIMO PASSO'}
                             </button>
                         </div>
                     </div>

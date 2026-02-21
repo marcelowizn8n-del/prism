@@ -1,7 +1,10 @@
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "../components/Sidebar";
+import { useAuth } from "../contexts/AuthContext";
 
 export function MainLayout() {
+    const { user } = useAuth();
+    const initial = user?.email?.[0]?.toUpperCase() ?? '?';
     return (
         <div className="flex h-screen w-full bg-background text-foreground overflow-hidden font-sans">
             <Sidebar />
@@ -22,9 +25,9 @@ export function MainLayout() {
                             <span className="text-[10px] font-bold tracking-widest text-emerald-500 uppercase">AI Online</span>
                         </div>
 
-                        {/* User Avatar Placeholder */}
-                        <div className="h-10 w-10 rounded-full bg-white/10 ring-2 ring-white/5 overflow-hidden flex items-center justify-center">
-                            <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Marcelo&backgroundColor=transparent" alt="User Avatar" className="h-full w-full object-cover" />
+                        {/* User Avatar */}
+                        <div className="h-10 w-10 rounded-full bg-primary/20 ring-2 ring-primary/30 flex items-center justify-center">
+                            <span className="text-sm font-bold text-primary">{initial}</span>
                         </div>
                     </div>
                 </header>
